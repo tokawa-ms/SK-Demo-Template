@@ -9,6 +9,9 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
 using Microsoft.SemanticKernel.Planning;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Logging.Console;
 
 class Program
 {
@@ -29,19 +32,24 @@ class Program
         var endpoint = builder["Endpoint"];
         var model = builder["DeployName"];
 
-        // テスト用に、UserSecrets から読み込んだ設定をコンソールに出力している。
-        System.Console.WriteLine(key);
-        System.Console.WriteLine(endpoint);
-        System.Console.WriteLine(model);
-
         var kernel = Kernel.Builder
         .Configure(c =>
         {
             c.AddAzureChatCompletionService(model, endpoint, key);
         })
+        .WithLogger(LoggerFactory.Create(b =>
+        {
+            b.AddFilter(_ => true);
+            b.AddConsole();
+        }).CreateLogger<Program>())
         .Build();
 
         //ここで Semantic Kernel の初期化が終わるので、そのあと色々やる。
+        //とりあえずログに色々出してみたり…
+        kernel.Log.LogInformation("Deployment : " + model);
+        kernel.Log.LogInformation("Endpoint : " + endpoint);
+        kernel.Log.LogInformation("key : " + key);
+        kernel.Log.LogInformation("Kernel initialized");
 
         Console.WriteLine("実行終了するには何かキーを押してください。");
         Console.ReadLine();
