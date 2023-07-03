@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "type": "completion",
+  "description": "input で入力された文章中から、出発地と到着地の地名を抽出し、departure に出発地の駅名、destination に到着地の駅名を、それぞれ「〇〇駅」の形式で返します。",
+  "completion": {
+    "max_tokens": 256,
+    "temperature": 0.0,
+    "top_p": 0.1,
+    "presence_penalty": 0.0,
+    "frequency_penalty": 0.0
+  },
+  "input": {
+    "parameters": [
+      {
+        "name": "input",
+        "description": "出発地と到着地の地名を取得する対象の文章",
+        "defaultValue": ""
+      }
+    ]
+  }
+}
